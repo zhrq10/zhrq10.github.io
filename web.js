@@ -25,9 +25,9 @@ window.onload = function(){
 				duration:500,
 				fx:'linear'
 			}
-		})
+		});
 		ev.cancelBubble = true; //阻止事件冒泡 防止在菜单未打开之前触发document的点击事件	
-	}
+	};
 	//收起更换皮肤
 	sq.onclick = function(){
 		MT(pf_box,{
@@ -41,8 +41,8 @@ window.onload = function(){
 				duration:500,
 				fx:'linear'
 			}
-		})
-	}
+		});
+	};
 	//更换不同风格皮肤
 	var zt = document.getElementById('zt');
 	var azt = zt.getElementsByTagName('a');
@@ -58,7 +58,7 @@ window.onload = function(){
 			}
 			this.className = 'active'; //添加当前的
 			tul[this.index].className = 'onOff';
-		}
+		};
 	}
 	for(var i=0;i<tul.length;i++){
 		src(tul[i]);
@@ -69,22 +69,22 @@ window.onload = function(){
 		for(var i=0;i<imgs.length;i++){
 			
 			imgs[i].onclick = function(){
-				var str = this.src.match(/\/(\w+\.(?:png|jpg|gif|bmp))$/i)[1]
+				var str = this.src.match(/\/(\w+\.(?:png|jpg|gif|bmp))$/i)[1]//判断图片格式
 				bgimg.src = 'image/bgs/' + str + '';
-			}
+			};
 			imgs[i].onmouseover = function(){
 				bg_yl.style.background = 'url('+this.src+')';
-			}
+			};
 		}
 	}
 //关闭窗口
 	closed.onclick = function(){
 		skin.style.display = 'none';
-	}
+	};
 	for(var i=0;i<imgo.length;i++){
 		imgo[i].onclick = function(){
 			bgimg.src = this.src
-		}
+		};
 	}
 	dows(skin);//拖拽皮肤框
 /*----------------------登陆框-----------------------------*/
@@ -101,26 +101,69 @@ window.onload = function(){
 	dows(land);//拖拽注册窗口
 	//登陆窗口显示和关闭
 	as[1].onclick = function(){
-		dlc(loading, 400, true)
+		dlc(loading, 400, true);
 		loading.style.display = 'block';
-	}
+	};
 	off.onclick = function(){
-		dlc(loading)
+		dlc(loading);
 		setTimeout(function(){
 			loading.style.display = 'none';
-		},100)
-	}
+		},100);
+	};
 	//注册窗口显示和关闭
 	as[2].onclick = function(){
-		dlc(land, 450, true)
+		dlc(land, 450, true);
 		land.style.display = 'block';
-	}
+	};
 	//关闭按钮
 	off1.onclick = function(){
-		dlc(land)
+		dlc(land);
 		setTimeout(function(){
 			land.style.display = 'none';
-		},100)
+		},100);
+	};
+	
+	 /*-------------------------注册验证---------------------------------------*/
+	var land = document.getElementById('land');
+	var username = document.getElementById('username');
+	var password = document.getElementById('password');
+	var aSpan = land.getElementsByTagName('span');
+	var submit = document.getElementById('submit');
+	var r_man = document.getElementById('man');
+	var r_woman = document.getElementById('woman');
+	var regPhone = /^1[3|4|5|8][0-9]\d{8}$/; //匹配手机号
+	var regPassword = /^[A-Za-z0-9]{6,12}$/; //匹配密码
+	var valU, valP, valP1, valS = man.value,
+		imgSrc = 'man'; //默认值是男;
+		username.onfocus = function() {
+			setInterval(function() {
+				valU = username.value;
+			}, 10)
+		};
+	
+		username.onblur = function() {
+			if (valU == '') return;
+			if (valU.match(regPhone)) {
+				status(username, aSpan[2], '*请输入您的手机号', true);
+	
+			} else {
+				status(username, aSpan[2], '*请输入正确的手机号', false);
+			}
+		}
+	
+	//判断验证对错的状态显示
+
+	function status(obj1, obj2, str, result) {
+		if (result) {
+			obj1.style.border = '1px solid #c7c7c7';
+			obj2.innerHTML = str;
+			obj2.style.color = '#f38200';
+		} else {
+			obj1.style.border = '1px solid red';
+			obj2.innerHTML = str;
+			obj2.style.color = 'red';
+
+		}
 	}
 	//注册登陆窗口显示封装
 	function dlc(obj, height, result){
@@ -133,6 +176,11 @@ window.onload = function(){
 			var Zt = Math.floor((Wh-height)/2)
 			obj.style.left  = Zl+'px';
 			MT(obj,{
+				'opacity': {
+					target: 100,
+					duration: 1000,
+					fx: 'bounceOut'
+				},
 				'top':{
 					target:Zt,
 					duration: 1000,
@@ -143,9 +191,14 @@ window.onload = function(){
 					duration: 30,
 					fx: 'linear'
 				}
-			})
+			});
 		}else{
 			MT(obj,{
+				'opacity': {
+					target: 0,
+					duration: 1000,
+					fx: 'bounceOut'
+				},
 				'top':{
 					targe:0,
 					duration: 500,
@@ -156,9 +209,9 @@ window.onload = function(){
 					duration: 1000,
 					fx: 'linear'
 				}
-			})
+			});
 		}
-	}
+	};
 /*  -------------- 左侧导航模拟--   -------------------------*/
 	var Menu = document.getElementById('Menu_a');
 	var Menu_img = Menu.getElementsByTagName('img');
@@ -173,14 +226,15 @@ window.onload = function(){
 				var dis = Math.sqrt(a*a+b*b);//平方根；
 				var scale = 0.9 - dis/300;//变化幅度
 				if(scale < 0.5){
-					scale = 0.5
+					scale = 0.5;
 				}
 				Menu_img[i].style.width = scale*70+'px';
 				Menu_img[i].style.height = scale*70+'px';
 			}
 		};
 		return false;
-	}
+	};
+	caozuo(Menu,0,true);
 	/*---------------------桌面图标--------------------------------*/
 	var web_icon = document.getElementById('web_icon');//桌面图标
 	var icon = document.getElementById('icon');//桌面图标第一层icon
@@ -188,7 +242,7 @@ window.onload = function(){
 	var Aul = web_icon.getElementsByTagName('ul');//获取web_icon下所有的ul 每一组
 	var Tmenu = document.getElementById('Tmenu');//选项卡焦点
 	var Tli = Tmenu.getElementsByTagName('li');//获取焦点下li
-	var wwidth = document.documentElement.clientWidth
+	var wwidth = document.documentElement.clientWidth;
 	var  num = 0;
 
 //切换桌面图标一组ul；
@@ -213,83 +267,26 @@ window.onload = function(){
 			num = this.index;
 		};
 	}
-	//桌面图标滚轮事件
-	var btn = true;
-	if(document.addEventListener){
-		document.addEventListener('DOMMouseScroll',show,false);
-	}
-	document.onmousewheel=gunmove;
-	function gunmove(ev){
-		var ev = ev || window.event;
-		if(ev.detail)
-		{
-			//firefox
-			btn=ev.detail>0? true:false;
-		}
-		else
-		{
-			//ie和chrome
-			btn=ev.wheelDelta<0? true:false;
-		}
-		if(btn){//下
-			num--
-			if(num<0){
-				num = Tli.length-1;
-			}
-		}else{
-			num++
-			if(num>Tli.length){
-				num = 0;
-			}
-		}
-		for(var i=0;i<Tli.length;i++){//选项卡式桌面焦点切换
-	 		Tli[i].className = '';
-	 		if(i<num){
-	 			MT( icon,{
- 					'left':{
- 						target: Tli[i] * wwidth,
-						duration: 300,
-						fx: 'linear'
- 					}
- 				})
-	 		}else{
-	 			MT( icon,{
- 					'left':{
- 						target: Tli[i] * wwidth,
-						duration: 300,
-						fx: 'linear'
- 					}
- 				})
-	 		}
- 		}
-		Tli[num].className = 'active';
-		MT( icon,{
-			'left':{
-				target: Tli[num] * wwidth,
-				duration: 300,
-				fx: 'linear'
-			}
-		});
-	}
 	/*--------------------------图标定位-----------------------------*/
 	var num1 = 160; //设置4个一列
 	var num2 = 117; //每个图标的坐标基数
 	var onOff = true; //默认是纵向菜单  判断排列方式
-	//var popOnff = true; //用来控制弹出窗口事件的触发
+	var popOnff = true; //用来控制弹出窗口事件的触发
 	var zyw = true; //用于控制图标的自由排列中运动位置
 	var menuOnff = true; //用于区分文件夹右键和系统右键
 	var arrRemove = []; //用于保存删除的文件夹的那个元素
 	var open_right = document.getElementById('open_right');//文件右键显示打开删除
-	var bli = open_right.getElementsByTagName('li')
-	var open_fist = open_right.children
+	var bli = open_right.getElementsByTagName('li');
+	var open_fist = open_right.children;
+	
 	//桌面（ul）中图标的排列
 	for(var i=0;i<Aul.length;i++){
 		show(Aul[i],onOff);//图标位置生成函数调用
 		click(Aul[i]); //多次传参，便于获取每个ul下面的li
-		caozuo(Aul[i],i)
+		caozuo(Aul[i],i);//图标操作
 	}
 	function show(Parent, onOff){
-		var arr = [];//保存桌面图标坐标
+		var arr = [];//保存桌面图标坐标;
 		var lis = Parent.getElementsByTagName('li');
 		
 		function change(onOff){
@@ -309,8 +306,8 @@ window.onload = function(){
 							duration: 300,
 							fx: 'easeIn'
 						}
-					})
-					arr.push([num2*Math.floor(i/line),num2*(i%line)])
+					});
+					arr.push([num2*Math.floor(i/line),num2*(i%line)]);
 				}
 			}else{
 				//横向排列
@@ -320,22 +317,22 @@ window.onload = function(){
 				
 				for(var i=0;i<lis.length;i++){
 					MT(lis[i],{
-						'left':{
-							target: num2 * Math.floor(i / row),
-							duration: 300,
-							fx: 'easeIn'
-						},
-						'top':{
+						'left': {
 							target: num2 * (i % row),
 							duration: 300,
 							fx: 'easeIn'
+						},
+						'top': {
+							target: num2 * Math.floor(i / row),
+							duration: 300,
+							fx: 'easeIn'
 						}
-					})
-					arr.push([num2*(i%row),num2*Math.floor(i/row)])
+					});
+					arr.push([num2*(i%row),num2*Math.floor(i/row)]);
 				}
 				
 			}
-		}
+		};
 		change(onOff);
 		/*-----------------------桌面图标拖拽效果----------------------------------*/
 		Adrag();
@@ -344,6 +341,7 @@ window.onload = function(){
 				lis[i].index = i;
 				lis[i].onmousedown = function(ev){
 					ev = ev||event;
+					popOnff = true; //按下时可以触发弹出窗口事件
 					var left,top;
 					if(!zyw){ //如果图标已经自由排列，那么就获取当前图标的位置
 						left = this.offsetLeft;
@@ -357,12 +355,13 @@ window.onload = function(){
 					var self = this;
 					document.onmousemove = function(ev){
 						//和谁交换谁加边框
+						popOnff = false; //如果拖动就阻止打开窗口
 						for(var i=0;i<lis.length;i++){
-							lis[i].style.border = ''
+							lis[i].style.border = '';
 						}
 						var nearli = near(self);
 						if(nearli){
-							nearli.style.border = '1px solid red'
+							nearli.style.border = '1px solid red';
 						}
 						x = ev.clientX-disx;
 						y = ev.clientY-disy;
@@ -377,7 +376,7 @@ window.onload = function(){
 //						alert(nearli)
 						var Index //用于交换索引的位置
 						for(var i=0;i<lis.length;i++){
-							lis[i].style.border = ''
+							lis[i].style.border = '';
 						}
 						if(nearli){
 							//需要交换的元素坐标位置
@@ -413,18 +412,18 @@ window.onload = function(){
 							nearli.index =Index;
 						}else{if(zyw){
 									MT(self,{
-									'left':{
-										target: left,
-										duration: 400,
-										fx: 'linear'
-									},
-									'top':{
-										target: top,
-										duration: 400,
-										fx: 'linear'
-									}
-								});
-							}
+										'left':{
+											target: left,
+											duration: 400,
+											fx: 'linear'
+										},
+										'top':{
+											target: top,
+											duration: 400,
+											fx: 'linear'
+										}
+									});
+								}
 						
 						}
 						document.onmouseup = document.onmousemove = null;
@@ -433,7 +432,7 @@ window.onload = function(){
 					return false;
 				};
 			}
-		}
+		};
 		//最近的
 		function near(obj){
 			var value = 9999;
@@ -477,22 +476,22 @@ window.onload = function(){
 			else{
 				return true;
 			}
-		}
-	}
+		};
+	};
 	
 	
 	//窗口发生变化时候，改变图标排列位置
 	bin(window,'resize',function(){
 		if(onOff){
 			for(var i=0;i<Aul.length;i++){
-				show(Aul[i],onOff) //图标位置生成函数调用
+				show(Aul[i],onOff); //图标位置生成函数调用
 			}
 		}else{
 			for (i = 0; i < Aul.length; i++) {
 				show(Aul[i]); //图标位置生成函数调用
 			}
 		}
-	})
+	});
 
 //	/*-------------桌面图标操作-------------------*/
 
@@ -517,23 +516,19 @@ window.onload = function(){
 		for(var i=0;i<lis.length;i++){
 			lis[i].index = i;
 			lis[i].onclick = function(){
-				win_open();
-//				if(isLeft){
-//					popUp(this,url[Uindex][this.index], isLeft); //弹窗
-//				} else {
-//						console.log(this, this.index, inp[this.index], url[Uindex][this.index])
-						popUp(this,url[Uindex][this.index]); //弹窗
-//				}
-			}
+				if(popOnff){
+					win_open();
+					if(isLeft){
+						popUp(this,url[Uindex][this.index], isLeft); //弹窗
+					} else {
+	//						console.log(this, this.index, inp[this.index], url[Uindex][this.index])
+							popUp(this,url[Uindex][this.index]); //弹窗
+					}
+				}
+				
+			};
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	var right_dbl = document.getElementById('right_dbl');//系统右键
@@ -584,7 +579,7 @@ window.onload = function(){
 			}
 			
 		}
-	}
+	};
 	/*--------------------弹出窗口操作---------------------------------*/	
 	var win_mask = document.getElementById('win_mask'); //弹出窗口
 	var w_h2 = win_mask.getElementsByTagName('h2')[0]; //弹出窗口h2
@@ -601,7 +596,7 @@ window.onload = function(){
 			O: 100,
 			L: 0,
 			T: 0
-		}
+		};
 //弹出窗口出现的位置
 	function win_open(){
 		win_mask.className = 'show';
@@ -621,8 +616,8 @@ window.onload = function(){
 		win_mask.style.left = json.L + 'px';
 		win_mask.style.top = json.T + 'px';
 
-	}
-
+	};
+	
 	function popUp(_this,src, isLeft) {
 			//切换弹出窗口标题
 			if (isLeft) {
@@ -638,7 +633,139 @@ window.onload = function(){
 				//折叠任务栏标题
 				//valT = val.value;
 			}
-	}
+			for (i = 0; i < ctrl_btn.length; i++) {
+				//最小化按钮
+				ctrl_btn[0].onclick = function() {
+					MT(win_mask, {
+						'height': {
+							target: 0,
+							duration: 500,
+							fx: 'linear'
+						},
+						'top': {
+							target: 500,
+							duration: 500,
+							fx: 'linear'
+						},
+						'opacity': {
+							target: 0,
+							duration: 500,
+							fx: 'linear'
+						}
+					}, function() {
+						win_mask.className = 'hidden'; //隐藏弹出窗口
+						ctrl_btn[1].className = 'magnify'; //显示默认最大化按钮样式
+						if (ctrl_btn[1].onOff) { //如果中间按钮的状态为true，那么就恢复left值设置为0
+							win_mask.style.left = 0 + 'px'; //恢复默认left值
+
+						} else {
+							win_mask.style.left = json.L + 'px'; //恢复默认left值
+
+						}
+					});
+
+//					setTimeout(function() { //延迟显示折叠任务菜单
+//						fold_menu(valT, _this); //折叠任务菜单	
+//				
+						//}, 300)
+				};
+				ctrl_btn[1].onclick = function() {
+					this.onOff = !this.onOff;
+					magnify(this.onOff, this);
+				};
+				ctrl_btn[2].onclick = function() {
+					iframe.src = '';
+					//关闭按钮
+					MT(win_mask, {
+						'height': {
+							target: 0,
+							duration: 500,
+							fx: 'linear'
+						},
+						'opacity': {
+							target: 0,
+							duration: 500,
+							fx: 'linear'
+						}
+					}, function() {
+						win_mask.className = 'hidden'; //隐藏弹出窗口
+						win_mask.style.cssText = 'width:' + json.W + 'px';
+						'height:' + json.H + 'px';
+						'top:' + json.T + 'px';
+						'left:' + json.L + 'px';
+						'opacity:' + json.O;
+						fliter: 'apha(opacity:' + json.O + ')';
+						ctrl_btn[1].className = 'magnify'; //显示默认最大化按钮样式
+					});
+				};
+
+				
+			}
+			/*---------最大化封装--------------------*/
+			function magnify(onOff, _this) {
+				if (onOff) {
+					//切换最大化按钮
+					_this.className = 'bg';
+					MT(win_mask, {
+						'width': {
+							target: clientW,
+							duration: 600,
+							fx: 'linear'
+						},
+						'height': {
+							target: clientH,
+							duration: 600,
+							fx: 'linear'
+						},
+						'left': {
+							target: 0,
+							duration: 600,
+							fx: 'linear'
+						},
+						'top': {
+							target: 0,
+							duration: 600,
+							fx: 'linear'
+						},
+						'opacity': {
+							target: 100,
+							duration: 600,
+							fx: 'linear'
+						}
+					})
+				} else {
+					_this.className = 'magnify';
+					MT(win_mask, {
+						'width': {
+							target: json.W,
+							duration: 600,
+							fx: 'linear'
+						},
+						'height': {
+							target: json.H,
+							duration: 600,
+							fx: 'linear'
+						},
+						'left': {
+							target: json.L,
+							duration: 600,
+							fx: 'linear'
+						},
+						'top': {
+							target: json.T,
+							duration: 600,
+							fx: 'linear'
+						},
+						'opacity': {
+							target: json.O,
+							duration: 600,
+							fx: 'linear'
+						}
+					});
+				}
+			}	
+	};
+
 /*--------------------系统右键显示------------------------*/
 
 	var right_dbl = document.getElementById('right_dbl');//系统右键
@@ -679,7 +806,7 @@ window.onload = function(){
 					this.children[0].children[0].className = 'show';
 					this.children[1].style.display = 'block';
 				}
-			}
+			};
 			//给Li加移出事件
 			obj[i].onmouseout = function(){
 				this.children[0].className = '';
@@ -688,7 +815,7 @@ window.onload = function(){
 				this.children[1].style.display = 'none';
 				}
 				
-			}
+			};
 		}
 	}
 /*----------------------右键切换大小-------------------------------------------*/
@@ -705,10 +832,10 @@ window.onload = function(){
 			css(lis[i], '80px', '80px', '5px', '5px');
 		}
 		for (i = 0; i < Aul.length; i++) {
-			show(Aul[i],onOff) //图标位置生成函数调用
+			show(Aul[i],onOff); //图标位置生成函数调用
 		}
 		open_right.style.display = 'none'; //隐藏右键菜单
-	}
+	};
 	
 	//----------切中等图-------
 	rli[1].onclick = function(){
@@ -719,10 +846,10 @@ window.onload = function(){
 			css(lis[i], '90px', '90px', '0px', '5px');
 		}
 		for (i = 0; i < Aul.length; i++) {
-			show(Aul[i],onOff) //图标位置生成函数调用
+			show(Aul[i],onOff); //图标位置生成函数调用
 		}
 		open_right.style.display = 'none'; //隐藏右键菜单
-	}
+	};
 	//----------切大图-------
 	rli[2].onclick = function(){
 		num1 = 230; //每个图标所占的真实位置  
@@ -732,10 +859,10 @@ window.onload = function(){
 			css(lis[i], '100px', '100px', '0px', '15px');
 		}
 		for (i = 0; i < Aul.length; i++) {
-			show(Aul[i],onOff) //图标位置生成函数调用
+			show(Aul[i],onOff) ;//图标位置生成函数调用
 		}
 		open_right.style.display = 'none'; //隐藏右键菜单
-	}
+	};
 	//图标样式切换函数封装
 	function css(obj, s1, s2, s3, s4) {
 
@@ -744,24 +871,26 @@ window.onload = function(){
 		obj.style.paddingBottom = s3;
 		obj.style.paddingTop = s4;
 
-	}
+	};
 	//排列图标
 	var pul = right_dbl.getElementsByTagName('ul')[1];//右键排列按钮
 	var pli = pul.getElementsByTagName('li');
 	//纵向排列
 	pli[1].onclick = function(){
+	
 		onOff = false;
 		zyw = true; //允许图标拖拽运动到原来位置
 		for (i = 0; i < Aul.length; i++) {
-			show(Aul[i]) //图标位置生成函数调用
+			show(Aul[i]); //图标位置生成函数调用
 		}
 	};
 	//横向排列
 	pli[0].onclick = function(){
+		
 		onOff = true;
 		zyw = true; //允许图标拖拽运动到原来位置
 		for (i = 0; i < Aul.length; i++) {
-			show(Aul[i],onOff) //图标位置生成函数调用
+			show(Aul[i],onOff) ;//图标位置生成函数调用
 		}
 	};
 	//自由排列
@@ -769,14 +898,39 @@ window.onload = function(){
 		zyw = false; //允许图标拖拽运动到原来位置
 		
 	};
+	/*--------刷新功能-------------------*/
+	var shuaxin_li = right_dbl.children[2];//刷新
+	shuaxin_li.onclick = function(){//改变图标的透明度原理
+		var arr0 = [];
+		for(var i=0;i<lis.length;i++){
+			arr0.push(lis[i]);
+			MT(lis[i], {
+				'opacity': {
+					target: 0,
+					duration: 400,
+					fx: 'linear'
+				}
+			},function(){
+				for(var j=0;j<arr0.length;j++){
+					MT(arr0[j],{
+						'opacity':{
+							target:100,
+							duration:400,
+							fx:'linear'
+						}
+					});
+				}
+			});
+		}
+	};
 	/*--------右键新建功能-------------------*/
 	var creat_li = right_dbl.children[4];//新建按钮
 	creat_li.onclick = function(){
 		createLi(true,num); //右键创建文件夹
-	}
+	};
 	function createLi(iscreat,createIndex){
 		if(iscreat){
-			var li = document.createElement('li')
+			var li = document.createElement('li');
 			li.innerHTML = '<a href="javascript:;"><img src="image/icon/27.png" alt="作品"/><i><input placeholder="新建文件夹" type="text" value="新建文件夹"/></i></a>';
 			Aul[createIndex].appendChild(li);
 		}
