@@ -91,18 +91,23 @@ window.onload = function(){
 	var loading = document.getElementById('loading');
 	var login_top = document.getElementById('login_top');
 	var off = login_top.getElementsByTagName('span')[0]//关闭按钮
+	var za = loading.getElementsByTagName('a')[0];//登陆上注册按钮
 	//注册获取元素
 	var land = document.getElementById('land');
 	var land_top = document.getElementById('land_top');
 	var off1 = land_top.getElementsByTagName('span')[0];//关闭按钮
 	var Ww,Wh;//可视区域大小
-
-	dows(loading);//拖拽登陆窗口
-	dows(land);//拖拽注册窗口
+	//登录窗口的注册按钮
+	za.onclick = function(){
+		dlc(land, 450, true);
+		land.style.display = 'block';
+		loading.style.display = 'none';
+	}
 	//登陆窗口显示和关闭
 	as[1].onclick = function(){
 		dlc(loading, 400, true);
 		loading.style.display = 'block';
+		land.style.display = 'none';
 	};
 	off.onclick = function(){
 		dlc(loading);
@@ -113,7 +118,13 @@ window.onload = function(){
 	//注册窗口显示和关闭
 	as[2].onclick = function(){
 		dlc(land, 450, true);
+		username.value = ''; //初始化
+		password.value = ''; //初始化
+		Ypassword.value = ''; //初始化
+		man.checked = 'checked'; //初始化
 		land.style.display = 'block';
+		loading.style.display = 'none';
+		status(Ypassword, aSpan[6], '请再次输入密码', true); //初始化
 	};
 	//关闭按钮
 	off1.onclick = function(){
@@ -129,37 +140,96 @@ window.onload = function(){
 	var password = document.getElementById('password');
 	var aSpan = land.getElementsByTagName('span');
 	var submit = document.getElementById('submit');
-	var r_man = document.getElementById('man');
-	var r_woman = document.getElementById('woman');
+	var man = document.getElementById('man');
+	var woman = document.getElementById('woman');
 	var regPhone = /^1[3|4|5|8][0-9]\d{8}$/; //匹配手机号
-	var regPassword = /^[A-Za-z0-9]{6,12}$/; //匹配密码
-	var valU, valP, valP1, valS = man.value,
-		imgSrc = 'man'; //默认值是男;
-		username.onfocus = function() {
+	var Ppassword = /^[A-Za-z0-9]{6,12}$/; //匹配密码
+	var valU, valP, valPY, valR =man.value,//手机号、密码、冲输密码 、性别
+		imgSrc = 'man'; //默认选中男;
+		//验证用户名用手机号
+		username.onfocus = function() {//象获得焦点时
 			setInterval(function() {
 				valU = username.value;
 			}, 10)
 		};
 	
-		username.onblur = function() {
+		username.onblur = function() {//失去焦点
 			if (valU == '') return;
-			if (valU.match(regPhone)) {
-				status(username, aSpan[2], '*请输入您的手机号', true);
+			if (valU.match(regPhone)) {//找到匹配值
+				status(username, aSpan[2], '', true);//验证完的状态显示；
 	
 			} else {
 				status(username, aSpan[2], '*请输入正确的手机号', false);
 			}
 		}
-	
+		//密码 必须是字母和数字组合
+		password.onfocus = function(){
+			setInterval(function(){
+				valP = password.value;
+			},10)
+		}
+		password.onblur = function(){
+			if(valP =='')return;
+			if(valP.match(Ppassword)){
+				status(password,aSpan[4], '', true)
+			}else{
+				status(password,aSpan[4], '*格式错误', false)
+			}
+		}
+		//确认密码验证
+		Ypassword.onfocus = function(){
+			setInterval(function(){
+				valPY = Ypassword.value;
+			},10)
+		}
+		Ypassword.onblur = function(){
+			if(valPY =='')return;
+			if(valPY!= undefined && valP != undefined && valPY == valP){
+				status(Ypassword,aSpan[6], '', true)
+			}else{
+				status(Ypassword,aSpan[6], '*和密码不一致', false)
+			}
+		}
+		//性别信息更改
+		man.onclick = function(){
+			valR = man.value ;
+			imgSrc = 'man';
+		}
+		woman.onclick = function(){
+			valR = woman.value ;
+			imgSrc = 'man';
+		}
+		
+		//点击注册
+		var zhuce = document.getElementById('zhuce');
+		zhuce.onclick = function(){
+			if(valU!= undefined&& valPY!= undefined && valP != undefined ){//所有不为空
+				if(valU.match(regPhone) && valP.match(Ppassword)&&valPY == valP ){//所有都符合正则匹配
+					var json = JSON.parse(localStorage.getItem(valU))//字符串解析成一个 JSON 对象/获取属性名；
+					if(json && json.username == valU){//用户名
+						return alert('账号已被注册')
+					}
+					var json1 ={
+						'username': valU,
+						'password': valP,
+						'sex': valR,
+						'name': imgSrc
+					}
+					localStorage.setItem(valU,JSON.stringify(json1));//存储属性名、属性值
+					alert('注册成功')
+				}
+			}else{
+				alert('请注册')
+			}
+		};
 	//判断验证对错的状态显示
-
 	function status(obj1, obj2, str, result) {
 		if (result) {
 			obj1.style.border = '1px solid #c7c7c7';
 			obj2.innerHTML = str;
 			obj2.style.color = '#f38200';
 		} else {
-			obj1.style.border = '1px solid red';
+			obj1.style.border = '2px solid red';
 			obj2.innerHTML = str;
 			obj2.style.color = 'red';
 
@@ -212,6 +282,99 @@ window.onload = function(){
 			});
 		}
 	};
+	/*----------登陆验证---------------------*/
+	var user = document.getElementById('user');
+	var pas = document.getElementById('pas');
+	var log = document.getElementById('log')
+	var remember = document.getElementById('remember'); //记住密码
+	var loading = document.getElementById('loading'); //登陆成功时的状态
+	var denglu = document.getElementById('denglu')//登陆按钮
+	var v_user, v_pas, key;//名字、密码
+	var qq = document.getElementById('qq')
+	user.onclick = function() {
+		setInterval(function() {
+			v_user = user.value;
+		}, 10)
+	}
+	pas.onclick = function() {
+		setInterval(function() {
+			v_pas = pas.value;
+		}, 10)
+	}
+	//登陆按钮
+	denglu.onclick = function(){
+		if(v_user&&v_pas){
+			if(v_user==undefined&&v_pas== undefined){
+				alert('请输入账号')
+			}
+			var json = JSON.parse(localStorage.getItem(v_user));
+			if(!json){
+				alert('用户不存在')
+			}else if(json && v_user == json.username && v_pas !== json.password){
+					alert('您输入密码或用户名错误');
+				}else if(json && v_user ==json.username && v_pas == json.password){
+					alert('登陆成功');
+					qq.style.display = 'block';
+					dlc(loading,350)
+				}
+			
+		}
+	}
+	var jiantou = document.getElementById('jiantou');
+	var aing = yonghu.getElementsByTagName('li')[0];
+	jiantou.onmouseover = function(){
+		yonghu.style.display ='block';
+	}
+	jiantou.onmouseout = function(){
+		setTimeout(function(){
+			yonghu.style.display ='none';
+		},800)
+	}
+	aing.onmouseover = function(){
+		yonghu.style.display ='block';
+	}
+	aing.onclick = function(){
+		confirm('确定要退出?')
+		qq.style.display = 'none';
+	}
+	//登陆窗口拖拽
+	login_top.onmousedown = function(ev) {
+		drag(ev,loading);
+	}
+	//注册窗口拖拽
+	land_top.onmousedown = function(ev) {
+		drag(ev,land);
+	}
+	function drag(ev, obj) {
+		var disX = ev.clientX - obj.offsetLeft;
+		var disY = ev.clientY - obj.offsetTop;
+		document.onmousemove = function(ev) {
+			ev = ev || event;
+			var x = ev.clientX - disX;
+			var y = ev.clientY - disY;
+			var maxL = document.documentElement.clientWidth - obj.offsetWidth;
+			var maxT = document.documentElement.clientHeight - obj.offsetHeight;
+			//限定x,y值得范围
+			if (x < 0) {
+				x = 0;
+			}
+			if (x > maxL) {
+				x = maxL;
+			}
+			if (y < 0) {
+				y = 0;
+			}
+			if (y > maxT) {
+				y = maxT;
+			}
+			obj.style.left = (x) + 'px';
+			obj.style.top = (y) + 'px';
+		}
+		document.onmouseup = function() {
+			document.onmousemove = document.onmouseup = null;
+		};
+		return false;
+	}
 /*  -------------- 左侧导航模拟--   -------------------------*/
 	var Menu = document.getElementById('Menu_a');
 	var Menu_img = Menu.getElementsByTagName('img');
@@ -505,7 +668,7 @@ window.onload = function(){
 			var inp = obj.getElementsByTagName('input'); //获取li下面的input标签
 
 		 url = [
-				['http://pan.baidu.com/', 'http://map.qq.com/', 'http://www.kuaipan.cn/', 'http://qqreader.qq.com/', 'http://reader.qq.com/cgi-bin/loginpage', 'https://zhrq1008.github.io/zhrq1008.github.io/Webqq/jianjie/'],
+				['http://pan.baidu.com/', 'http://map.qq.com/', 'http://www.kuaipan.cn/', 'http://qqreader.qq.com/', 'http://reader.qq.com/cgi-bin/loginpage', 'jianjie/'],
 				['http://douban.fm/partner/qq_plus', 'http://webqq.qidian.com', 'http://www.kuaidi100.com/ad/head_ad.html', 'http://www.dooland.com/', 'http://www.le.com/', 'http://www.mangocity.com/?utm_source=bdppzq&utm_medium=cpc=0020005'],
 				['http://qqreader.qq.com/', 'http://v.qq.com/', 'http://www.le.com/'],
 				['http://www.pengyou.com/?http%3A%2F%2Fhome.pengyou.com%2Findex.php%3Fmod%3Dhome', 'http://www.3366.com/', 'http://web.3366.com/ddz/'],
@@ -957,18 +1120,18 @@ window.onload = function(){
 		
 	}
 	/*---------------------时钟---------------------------*/
-		var bg = document.getElementById('bg')
-		
-		var wrap = document.getElementById('wrap');
-		var lists = document.getElementById('lists');
-		var h = document.getElementById('hour');
-		var minu = document.getElementById('min');
-		var sec = document.getElementById('sec');
-		var str = "";
-		for(var i = 0;i<60;i++){
-			str += '<li style= transform:rotate('+i*6+'deg)><span></span></li>';
-		}
-		lists.innerHTML = str;
+//		var bg = document.getElementById('bg')
+//		
+//		var wrap = document.getElementById('wrap');
+//		var lists = document.getElementById('lists');
+//		var h = document.getElementById('hour');
+//		var minu = document.getElementById('min');
+//		var sec = document.getElementById('sec');
+//		var str = "";
+//		for(var i = 0;i<60;i++){
+//			str += '<li style= transform:rotate('+i*6+'deg)><span></span></li>';
+//		}
+//		lists.innerHTML = str;
 //		var spans = document.getElementsByTagName('span');
 //		console.log(spans.length)
 //		for(var i = 0;i<60;i++){
@@ -1000,23 +1163,23 @@ window.onload = function(){
 
 	
 	dows(bg);
-	
+	bg.onmousedown
 	
 	function dows(obj){
 	obj.onmousedown=function(ev){
-		if (obj.aaa == 2)
-		{
-			return;
-		}
+//		if (obj.aaa == 2)
+//		{
+//			return;
+//		}
 		
 		var ev=ev||event;
 		var iLeft=ev.clientX-obj.offsetLeft;
 		var iTop=ev.clientY-obj.offsetTop;
 			
-		if(obj.setCapture)
-		{
-			obj.setCapture();
-		}
+//		if(obj.setCapture)
+//		{
+//			obj.setCapture();
+//		}
 		document.onmousemove=function(ev){
 			var ev=ev||event;
 			var L=ev.clientX-iLeft;
@@ -1045,16 +1208,15 @@ window.onload = function(){
 			document.onmouseup=function(){
 				document.onmousemove=null;
 				document.onmouseup=null;
-				if(obj.releaseCapture)
-				{
-					obj.releaseCapture();
-				}
+//				if(obj.releaseCapture)
+//				{
+//					obj.releaseCapture();
+//				}
 			}
 	
 			return false;
 		}
 	}
-
 	//绑定事件函数封装
 	function bin(obj,eventType,fn){
 		if(obj.addEventListener){
@@ -1067,6 +1229,7 @@ window.onload = function(){
 			})
 		}
 	}
+	/*-------------------------------------*/
 	
 	
 	
